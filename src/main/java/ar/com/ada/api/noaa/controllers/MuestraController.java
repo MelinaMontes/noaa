@@ -10,32 +10,47 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.com.ada.api.noaa.entities.Muestra;
 import ar.com.ada.api.noaa.models.request.MuestraRequest;
-import ar.com.ada.api.noaa.models.response.GenericResponse;
-import ar.com.ada.api.noaa.models.response.MuestraResponse;
-import ar.com.ada.api.noaa.services.BoyaService;
+import ar.com.ada.api.noaa.models.response.*;
+
 import ar.com.ada.api.noaa.services.MuestraService;
 
 @RestController
 public class MuestraController {
     @Autowired
     MuestraService muestraService;
-    @Autowired
-    BoyaService boyaService;
 
     @PostMapping("/muestras")
-    public ResponseEntity<?> crear(@RequestBody MuestraRequest muestraRequest) {
-        MuestraRequest genericResponse = new MuestraRequest();
+    public ResponseEntity<MuestraResponse> crear(@RequestBody MuestraRequest muestra) {
+
         MuestraResponse muestraCreada = new MuestraResponse();
-        Muestra muestraRegistrada = muestraService.crear();
+
+        Muestra muestraRegistrada = muestraService.crear(muestra.boyaId, muestra.horario, muestra.latitud,
+                muestra.longitud, muestra.matriculaEmbarcacion, muestra.alturaMar);
+
+        muestraCreada.id = muestraRegistrada.getId();
+
+        if (muestra.alturaMar < -50 || muestra.alturaMar > 50) {
+            muestraCreada.color = "AMARILLO";
+        }
+        if (muestra.alturaMar < -100 || muestra.alturaMar > 100) {
+
+            muestraCreada.color = "ROJO";
+
+        } else {
+
+            muestraCreada.color = "VERDE";
+        }
+
         return ResponseEntity.ok(muestraCreada);
 
     }
 
-    @DeleteMapping("/boyas/{id}")
-    public ResponseEntity<MuestraRequest> eliminar(@PathVariable Integer id) {
-
-        boyaService.eliminar(id);
-        MuestraRequest respuesta = new MuestraRequest();
+    // Reseteara el clor de la luz de la boya a “AZUL” a partir de una muesar
+    // especifiac
+    @DeleteMapping("/muestras/{id}")
+    public ResponseEntity<GenericResponse> eliminar(@PathVariable Integer id) {
+        GenericResponse respuesta = new GenericResponse();
+        muestraService.eliminar(id);
 
         respuesta.isOk = true;
         respuesta.message = "boya eliminada";
@@ -43,4 +58,4 @@ public class MuestraController {
         return ResponseEntity.ok(respuesta);
     }
 }
- //faltan endpoints !!!! D:
+// faltan endpoints !!!! D:

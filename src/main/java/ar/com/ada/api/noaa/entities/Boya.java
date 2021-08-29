@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "boya")
 public class Boya {
 
-    @Column(name = "idboya")
+    @Column(name = "boya_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -68,11 +68,11 @@ public class Boya {
     public void setMuestras(List<Muestra> muestras) {
         this.muestras = muestras;
     }
- //rel bidirct
+
+    // rel bidirct
     public void agregar(Muestra muestra) {
         this.muestras.add(muestra);
-        muestra.setBoya(this);
+        // muestra.setBoya(this);
     }
 
 }
-

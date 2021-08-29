@@ -2,7 +2,6 @@ package ar.com.ada.api.noaa.services;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,64 +20,33 @@ public class MuestraService {
     MuestraRepo muestraRepo;
 
     public Muestra crear(Integer boyaId, Date horarioMuestra, Double latitud, Double longitud,
-            String matriculaEmbarcacion, Double altura) {
-        Boya boya = boyaService.buscarPorId(boyaId);
-        if (boya != null) {
+            String matriculaEmbarcacion, Double alturaMar) {
 
-            Muestra muestra = new Muestra();
-            muestra.setAlturaMar(altura);
-            muestra.setHorario(horarioMuestra);
-            muestra.setLatitud(latitud);
-            muestra.setLongitud(longitud);
-            muestra.setMatricula(matriculaEmbarcacion);
-            boya.agregar(muestra);
+        Muestra muestra = new Muestra();
+        Boya boya = boyaService.buscarBoya(boyaId);
+        muestra.setBoya(boya);// setea una muestra a una boya
+        muestra.getAlturaMar();
+        muestra.setHorario(horarioMuestra);
+        muestra.setLatitud(latitud);
+        muestra.setLongitud(longitud);
+        muestra.setMatricula(matriculaEmbarcacion);
 
-            boya.setColorLuz(this.verColor(muestra.getAlturaMar()));
-            grabarMuestra(muestra);
-        
-            return boya.getMuestras().get(boya.getMuestras().size() - 1);
-        } else {
-            return null;
-        }
+        boyaService.actualizar(boya);
+        return muestra;
 
     }
 
-    public String verColor(Double altura) {
-
-        if (altura < -50 || altura > 50) {
-            return "AMARILLO";
-        } else if (altura < -100 || altura > 100) {
-            return "ROJO";
-        } else {
-            return "VERDE";
-        }
+    public List<Muestra> buscarTodas(Integer boyaId) {
+        Boya boya = boyaService.buscarBoya(boyaId);
+        return boya.getMuestras();
     }
 
-    public void grabarMuestra(Muestra muestra) {
-
-        boyaService.actualizar(muestra.getBoya());
-
+    public void eliminar(Integer muestraId) {
+        Muestra muestra = muestraRepo.findByMuestraId(muestraId);
+        Integer boyaId = muestra.getBoya().getId();
+        Boya boya = boyaService.buscarBoya(boyaId);
+        boya.setColorLuz("AZUL"); // PORQUE ES LA QUE VA X DEFAULT
+        boyaService.actualizar(boya);
     }
-
-    public Muestra buscarPorId(Integer id) {
-        Optional<Muestra> optionalMuestra = muestraRepo.findById(id);
-
-        if (optionalMuestra.isPresent())
-            return optionalMuestra.get();
-        else
-            return null;
-
-    }
-
-    public List<Muestra> buscarTodas() {
-        return muestraRepo.findAll();
-    }
-
-    public void deleteMuestra(Muestra muestra) {
-        muestraRepo.delete(muestra);
-    }
-
-   
 
 }
-

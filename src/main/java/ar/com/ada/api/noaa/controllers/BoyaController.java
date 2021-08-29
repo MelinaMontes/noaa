@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import ar.com.ada.api.noaa.entities.Boya;
 import ar.com.ada.api.noaa.models.request.BoyaNuevaInfo;
+import ar.com.ada.api.noaa.models.request.ColorDeBoya;
 import ar.com.ada.api.noaa.models.response.GenericResponse;
 import ar.com.ada.api.noaa.services.BoyaService;
 
@@ -17,33 +18,37 @@ public class BoyaController {
     BoyaService boyaService;
 
     @PostMapping("/boyas")
-    public ResponseEntity<GenericResponse> nuevaBoya(@RequestBody Boya boya) {
-        boyaService.nuevaBoya(boya);
-
+    public ResponseEntity<GenericResponse> nuevaBoya(@RequestBody BoyaNuevaInfo boya) {
         GenericResponse genericResponse = new GenericResponse();
+        boyaService.crearBoya(boya.latitudInstalacion, boya.longitudInstalacion);
+
         genericResponse.message = "Nueva boya creada correctamente";
         genericResponse.isOk = true;
-        genericResponse.id = boya.getId();
+
         return ResponseEntity.ok(genericResponse);
 
     }
 
-    @GetMapping("/boyas")
+    @GetMapping("/boyas") // que devuelva las boyas SIN las muestras.
+
     public ResponseEntity<List<Boya>> traer() {
-        List<Boya> mostrarBoyas = boyaService.traer();
-        return ResponseEntity.ok(mostrarBoyas);
+
+        return ResponseEntity.ok(boyaService.traer());
     }
 
-    @GetMapping("/boyas/{id}")
+    @GetMapping("/boyas/{id}") // : que devuelva la info de una boya en particular(SIN las muestras)
+
     public ResponseEntity<Boya> buscarPorId(@PathVariable Integer id) {
-        return ResponseEntity.ok(boyaService.buscarPorId(id));
+        Boya boya = boyaService.buscarBoya(id);
+        return ResponseEntity.ok(boya);
     }
 
-    @PutMapping("/boyas/{id}") //actualiza una categoria existente
-    public ResponseEntity<GenericResponse> actualizar (@PathVariable Integer id, @RequestBody BoyaNuevaInfo boyaNuevaInfo){
-    
-        boyaService.actualizar(id, boyaNuevaInfo);
+    @PutMapping("/boyas/{id}") // actualiza una categoria existente por color
+    public ResponseEntity<GenericResponse> actualizar(@PathVariable Integer id, @RequestBody ColorDeBoya infoColor) {
         GenericResponse respuesta = new GenericResponse();
+        Boya boya = boyaService.buscarBoya(id);
+        boya.setColorLuz(infoColor.color);
+        boyaService.actualizar(boya);
 
         respuesta.isOk = true;
         respuesta.message = "boyaactualizada";
@@ -51,8 +56,5 @@ public class BoyaController {
         return ResponseEntity.ok(respuesta);
 
     }
-
-    @
-
 
 }

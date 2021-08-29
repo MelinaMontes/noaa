@@ -6,9 +6,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "muestra")
 public class Muestra {
-    @Column(name = "idmuestra")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "muestra_id")
     private Integer id;
 
     @Column(name = "horario_muestra")
@@ -24,9 +24,8 @@ public class Muestra {
     @Column(name = "altura")
     private Double alturaMar;
 
-
     @ManyToOne
-    @JoinColumn(name = "idboya", referencedColumnName = "idboya")
+    @JoinColumn(name = "boya_id", referencedColumnName = "boya_id")
     private Boya boya;
 
     public Integer getId() {
@@ -84,4 +83,17 @@ public class Muestra {
     public void setBoya(Boya boya) {
         this.boya = boya;
     }
+
+    public String muestraColor(Muestra muestra) {
+
+        if (muestra.getAlturaMar() < -50 || muestra.getAlturaMar() > 50) {
+            return "AMARILLO";
+        }
+        if (muestra.getAlturaMar() < -100 || muestra.getAlturaMar() > 100) {
+            return "ROJO";
+        } else {
+            return "VERDE";
+        }
+    }
+
 }
