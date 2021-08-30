@@ -19,7 +19,7 @@ public class MuestraController {
     @Autowired
     MuestraService muestraService;
 
-    @PostMapping("/muestras")
+    @PostMapping("/api/muestras")
     public ResponseEntity<MuestraResponse> crear(@RequestBody MuestraRequest muestra) {
 
         MuestraResponse muestraCreada = new MuestraResponse();
@@ -27,7 +27,7 @@ public class MuestraController {
         Muestra muestraRegistrada = muestraService.crear(muestra.boyaId, muestra.horario, muestra.latitud,
                 muestra.longitud, muestra.matriculaEmbarcacion, muestra.alturaMar);
 
-        muestraCreada.id = muestraRegistrada.getId();
+        muestraCreada.id = muestraRegistrada.getMuestraId();
 
         if (muestra.alturaMar < -50 || muestra.alturaMar > 50) {
             muestraCreada.color = "AMARILLO";
@@ -47,7 +47,7 @@ public class MuestraController {
 
     // Reseteara el clor de la luz de la boya a “AZUL” a partir de una muesar
     // especifiac
-    @DeleteMapping("/muestras/{id}")
+    @DeleteMapping("/api/muestras/{id}")
     public ResponseEntity<GenericResponse> eliminar(@PathVariable Integer id) {
         GenericResponse respuesta = new GenericResponse();
         muestraService.eliminar(id);

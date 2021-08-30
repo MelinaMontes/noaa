@@ -10,11 +10,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 @Table(name = "boya")
 public class Boya {
-
-    @Column(name = "boya_id")
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "boya_id")
+    private Integer boyaId;
 
     @Column(name = "color_luz")
     private String colorLuz;
@@ -29,12 +28,12 @@ public class Boya {
     @OneToMany(mappedBy = "boya", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Muestra> muestras = new ArrayList<>();
 
-    public Integer getId() {
-        return id;
+    public Integer getBoyaId() {
+        return boyaId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setBoyaId(Integer boyaId) {
+        this.boyaId = boyaId;
     }
 
     public String getColorLuz() {

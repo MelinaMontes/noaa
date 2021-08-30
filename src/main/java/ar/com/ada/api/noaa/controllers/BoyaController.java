@@ -14,10 +14,15 @@ import ar.com.ada.api.noaa.services.BoyaService;
 
 @RestController
 public class BoyaController {
+      /*private BoyaService service;
+   public BoyaController(BoyaService service){
+       this.service=service;
+   }
+*/
     @Autowired
     BoyaService boyaService;
 
-    @PostMapping("/boyas")
+    @PostMapping("/api/boyas")
     public ResponseEntity<GenericResponse> nuevaBoya(@RequestBody BoyaNuevaInfo boya) {
         GenericResponse genericResponse = new GenericResponse();
         boyaService.crearBoya(boya.latitudInstalacion, boya.longitudInstalacion);
@@ -29,14 +34,14 @@ public class BoyaController {
 
     }
 
-    @GetMapping("/boyas") // que devuelva las boyas SIN las muestras.
+    @GetMapping("/api/boyas") // que devuelva las boyas SIN las muestras.
 
     public ResponseEntity<List<Boya>> traer() {
 
         return ResponseEntity.ok(boyaService.traer());
     }
 
-    @GetMapping("/boyas/{id}") // : que devuelva la info de una boya en particular(SIN las muestras)
+    @GetMapping("/api/boyas/{id}") // : que devuelva la info de una boya en particular(SIN las muestras)
 
     public ResponseEntity<Boya> buscarPorId(@PathVariable Integer id) {
         Boya boya = boyaService.buscarBoya(id);

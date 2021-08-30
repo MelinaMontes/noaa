@@ -9,7 +9,7 @@ public class Muestra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "muestra_id")
-    private Integer id;
+    private Integer muestraId;
 
     @Column(name = "horario_muestra")
     private Date horario;
@@ -28,12 +28,12 @@ public class Muestra {
     @JoinColumn(name = "boya_id", referencedColumnName = "boya_id")
     private Boya boya;
 
-    public Integer getId() {
-        return id;
+    public Integer getMuestraId() {
+        return muestraId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setMuestraId(Integer muestraId) {
+        this.muestraId = muestraId;
     }
 
     public Date getHorario() {
@@ -82,6 +82,7 @@ public class Muestra {
 
     public void setBoya(Boya boya) {
         this.boya = boya;
+        this.boya.agregar(this);
     }
 
     public String muestraColor(Muestra muestra) {

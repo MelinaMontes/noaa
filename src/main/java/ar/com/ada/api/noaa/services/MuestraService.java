@@ -12,12 +12,10 @@ import ar.com.ada.api.noaa.repos.MuestraRepo;
 
 @Service
 public class MuestraService {
-
-    @Autowired
-    BoyaService boyaService;
-
     @Autowired
     MuestraRepo muestraRepo;
+    @Autowired
+    BoyaService boyaService;
 
     public Muestra crear(Integer boyaId, Date horarioMuestra, Double latitud, Double longitud,
             String matriculaEmbarcacion, Double alturaMar) {
@@ -43,7 +41,7 @@ public class MuestraService {
 
     public void eliminar(Integer muestraId) {
         Muestra muestra = muestraRepo.findByMuestraId(muestraId);
-        Integer boyaId = muestra.getBoya().getId();
+        Integer boyaId = muestra.getBoya().getBoyaId();
         Boya boya = boyaService.buscarBoya(boyaId);
         boya.setColorLuz("AZUL"); // PORQUE ES LA QUE VA X DEFAULT
         boyaService.actualizar(boya);
