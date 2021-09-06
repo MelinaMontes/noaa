@@ -21,7 +21,7 @@ public class Muestra {
 
     private Double latitud;
 
-    @Column(name = "altura")
+    @Column(name = "altura_mar")
     private Double alturaMar;
 
     @ManyToOne
@@ -82,7 +82,7 @@ public class Muestra {
 
     public void setBoya(Boya boya) {
         this.boya = boya;
-        this.boya.agregar(this);
+        this.boya.agregarMuestra(this);
     }
 
     public String muestraColor(Muestra muestra) {

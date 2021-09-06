@@ -22,6 +22,10 @@ public class BoyaService {
         repo.save(boya);
     }
 
+    public void guardar(Boya boya) {
+        repo.save(boya);
+    }
+
     public List<Boya> traer() {
         return repo.findAll();
     }
@@ -30,8 +34,14 @@ public class BoyaService {
         return repo.findByboyaId(boyaId);
     }
 
-    public void actualizar(Boya boya) {
-        repo.save(boya);
+    public boolean actualizarColorDeLaBoya(Integer boyaId, String colorLuz) {
+        Boya boya = buscarBoya(boyaId);
+        if (boya != null) {
+            boya.setColorLuz(colorLuz);
+            guardar(boya);
+            return true;
+        }
+        return false;
     }
 
 }

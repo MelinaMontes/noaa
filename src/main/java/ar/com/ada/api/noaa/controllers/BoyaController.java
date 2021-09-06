@@ -14,11 +14,10 @@ import ar.com.ada.api.noaa.services.BoyaService;
 
 @RestController
 public class BoyaController {
-      /*private BoyaService service;
-   public BoyaController(BoyaService service){
-       this.service=service;
-   }
-*/
+    /*
+     * private BoyaService service; public BoyaController(BoyaService service){
+     * this.service=service; }
+     */
     @Autowired
     BoyaService boyaService;
 
@@ -48,17 +47,21 @@ public class BoyaController {
         return ResponseEntity.ok(boya);
     }
 
-    @PutMapping("/boyas/{id}") // actualiza una categoria existente por color
-    public ResponseEntity<GenericResponse> actualizar(@PathVariable Integer id, @RequestBody ColorDeBoya infoColor) {
+    @PutMapping("api/boyas/{id}") // actualiza una categoria existente por color
+    public ResponseEntity<GenericResponse> actualizarColorDeLaBoya(@PathVariable Integer id,
+            @RequestBody ColorDeBoya infoColor) {
         GenericResponse respuesta = new GenericResponse();
-        Boya boya = boyaService.buscarBoya(id);
-        boya.setColorLuz(infoColor.color);
-        boyaService.actualizar(boya);
 
-        respuesta.isOk = true;
-        respuesta.message = "boyaactualizada";
+        if (boyaService.actualizarColorDeLaBoya(id, infoColor.color)) {
+            respuesta.isOk = true;
+            respuesta.message = "El color de la boya se ha actualizado con exito";
 
+        }
         return ResponseEntity.ok(respuesta);
+        /*
+         * Boya boya = boyaService.buscarBoya(id); boya.setColorLuz(infoColor.color);
+         * boyaService.guardar(boya);
+         */
 
     }
 

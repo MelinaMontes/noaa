@@ -69,9 +69,8 @@ public class Boya {
     }
 
     // rel bidirct
-    public void agregar(Muestra muestra) {
+    public void agregarMuestra(Muestra muestra) {
         this.muestras.add(muestra);
-        // muestra.setBoya(this);
     }
 
 }
